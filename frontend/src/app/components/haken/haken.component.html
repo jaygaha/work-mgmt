@@ -1,0 +1,76 @@
+<app-nav-header></app-nav-header>
+
+<div id="wrapper">
+    <app-nav-sidebar></app-nav-sidebar>
+
+    <div id="content-wrapper">
+        <div class="container-fluid">
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="#">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Hakens</li>
+          </ol>
+          <div class="row">
+              <div class="col-12 mb-1">
+                <button type="button" class="btn btn-primary" (click)="createHakenModal(template)">Add Haken</button>
+              </div>
+          </div>
+          <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="showAlert">
+            <strong>Success!</strong> {{ messageAlert }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Telephone</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>                
+                <tr *ngFor="let haken of hakens">
+                  <td>{{ haken.name }}</td>
+                  <td>{{ haken.address }}</td>
+                  <td>{{ haken.contact_number }}</td>
+                  <td><button class="btn btn-info" (click)="editHakenModal(template, haken)">Edit</button> | <button class="btn btn-danger" onclick="alert('I am under construction')">DELETE</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div> <!-- /.container-fluid -->
+    </div> <!-- /.content-wrapper -->
+
+    <app-nav-footer></app-nav-footer>
+</div> <!-- /#wrapper -->
+<ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">{{ _hakenService.hakenForm.controls['id'].value ? "Edit Haken" : "New Haken" }}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="_hakenService.hakenForm" class="form" (submit)="onSubmit()">
+        <input type="hidden" formControlName="id">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input class="form-control" formControlName="name" id="name" />
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input class="form-control" formControlName="address" id="address" />
+        </div>
+        <div class="form-group">
+            <label for="contact_number">Contact No.</label>
+            <input class="form-control" formControlName="contact_number" id="contact_number" />
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="_hakenService.hakenForm.invalid">{{ _hakenService.hakenForm.controls['id'].value ? "Update Haken" : "Add Haken" }}</button>
+      </form>
+    </div>
+  </ng-template>
