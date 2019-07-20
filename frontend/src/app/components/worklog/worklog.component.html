@@ -1,0 +1,95 @@
+<app-nav-header></app-nav-header>
+
+<div id="wrapper">
+  <app-nav-sidebar></app-nav-sidebar>
+  <div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/recruits']">Recruits</a>
+          </li>
+        <li class="breadcrumb-item active">Work Logs</li>
+      </ol>
+      <div class="row">
+        <div class="col-12">
+          <h5 *ngIf="recruit">
+              {{ recruit.employee.first_name }} {{ recruit.employee.last_name }}
+              <small class="text-muted">{{ recruit.job.name }}</small><br />
+              <small class="text-muted">Company: {{ recruit.job.company.name }}</small>&nbsp;
+              <small class="text-muted">Haken: {{ recruit.job.hakens[0].name }}</small>
+          </h5>
+        </div>
+        <div class="col-12 mb-1">
+          <button type="button" class="btn btn-primary" (click)="createWorkLogModal(template)">Add Work Log</button>
+        </div>
+      </div>
+      <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="showAlert">
+        <strong>Success!</strong> {{ messageAlert }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Entry At</th>
+              <th>Out At</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let worklog of worklogs">
+              <td>{{ worklog.entry_datetime | date:'MMMM d, y H:mm' }}</td>
+              <td>{{ worklog.out_datetime | date:'MMMM d, y H:mm' }}</td>
+              <td><button class="btn btn-info btn-circle btn-sm" (click)="editWorkLogModal(template, worklog)"><i class="far fa-edit"></i></button> | 
+                <button class="btn btn-danger btn-circle btn-sm" onclick="alert('I am under construction')"><i class="far fa-trash-alt"></i></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> <!-- /.container-fluid -->
+  </div> <!-- /.content-wrapper -->
+
+  <app-nav-footer></app-nav-footer>
+</div> <!-- /#wrapper -->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ _worklogService.worklogForm.controls['id'].value ? "Edit Work Log" : "New Work Log" }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="_worklogService.worklogForm" class="form" (submit)="onSubmit()">
+      <input type="hidden" formControlName="id">
+      <input type="hidden" formControlName="recruit_id">
+      <div class="form-group">
+        <label for="entry_datetime">Entry At</label>
+        <input
+         class="form-control"
+         #datepickerFull="bsDatepicker"
+         bsDatepicker
+         placeholder="YYYY-m-d H:m"
+         formControlName="entry_datetime"
+         [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD, H:mm' }">
+      </div>
+      <div class="form-group">
+        <label for="out_datetime">Out At</label>
+        <input
+         class="form-control"
+         #datepickerFull="bsDatepicker"
+         bsDatepicker
+         placeholder="YYYY-m-d H:m"
+         formControlName="out_datetime"
+         [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD, H:mm' }">
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="_worklogService.worklogForm.invalid">{{ _worklogService.worklogForm.controls['id'].value ? "Update Work Log" : "Add Work Log" }}</button>
+    </form>
+  </div>
+</ng-template>

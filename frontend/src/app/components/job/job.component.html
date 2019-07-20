@@ -1,0 +1,184 @@
+<app-nav-header></app-nav-header>
+
+<div id="wrapper">
+  <app-nav-sidebar></app-nav-sidebar>
+  <div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Jobs</li>
+      </ol>
+      <div class="row">
+        <div class="col-12 mb-1">
+          <button type="button" class="btn btn-primary" (click)="createJobModal(template)">Add Job</button>
+        </div>
+      </div>
+      <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="showAlert">
+        <strong>Success!</strong> {{ messageAlert }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Company</th>
+              <th>Hakens</th>
+              <th>Payments</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let job of jobs">
+              <td>{{ job.name }}</td>
+              <td>{{ job.company.name }}</td>
+              <td>
+                <span *ngFor="let haken of job.hakens; let isLast = last">
+                    {{ haken.name }}{{ isLast ? '' : ', ' }}
+                 </span>
+              </td>
+              <td>
+                <b>Day</b><br />
+                Basic: {{ job.pph_amount }} <br />
+                Basic: {{ job.ot_amount }} <br />
+                <b>Night</b><br />
+                Basic: {{ job.night_pph_amount}} <br />
+                Basic: {{ job.night_pph_amount}}
+              </td>
+              <td><button class="btn btn-info btn-circle btn-sm" (click)="editJobModal(template, job)"><i class="far fa-edit"></i></button> | 
+                <button class="btn btn-danger btn-circle btn-sm" onclick="alert('I am under construction')"><i class="far fa-trash-alt"></i></button></td>
+            </tr>
+          </tbody>
+          </table>
+      </div>
+    </div> <!-- /.container-fluid -->
+  </div> <!-- /.content-wrapper -->
+
+  <app-nav-footer></app-nav-footer>
+</div> <!-- /#wrapper -->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ _jobService.jobForm.controls['id'].value ? "Edit Job" : "New Job" }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="_jobService.jobForm" class="form" (submit)="onSubmit()">
+      <input type="hidden" formControlName="id">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+              <label for="name">Name</label>
+              <input class="form-control" formControlName="name" id="name" />
+              </div>
+              <div class="form-group">
+                  <label for="company_id">Company</label>
+                  <ng-select
+                  [items]="_jobService.companies"
+                  bindLabel="name"
+                  bindValue="id"
+                  placeholder="Select company"
+                  clearAllText="Clear"
+                  [virtualScroll]="true"
+                  [compareWith]="compareSelectValues"
+                  formControlName="company_id"
+                  [loading]="a"
+                >
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                  <label for="description">Description</label>
+                  <input class="form-control" formControlName="description" id="description" />
+              </div>
+              <div class="form-group">
+                  <label for="teji">Teji Hours</label>
+                  <input class="form-control" formControlName="teji" id="teji" type="number" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-1">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12">
+          <div class="form-group">
+            <label for="haken_id">Hakens</label>
+            <ng-select 
+              [items]="_jobService.hakens"
+              bindLabel="name"
+              bindValue="id"
+              [multiple]="true"
+              placeholder="Select hakens"
+              clearAllText="Clear"
+              [virtualScroll]="true"
+              [hideSelected]="true"
+              [closeOnSelect]="false"
+              formControlName="haken_id"
+              [compareWith]="compareSelectValues"
+              ></ng-select>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-1">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                  <label for="pph_amount">Payment per hour</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">&#165;</div>
+                    </div>
+                    <input class="form-control" formControlName="pph_amount" id="pph_amount" type="number" placeholder="800"/>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="ot_amount">Overtime payment per hour</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">&#165;</div>
+                    </div>
+                    <input class="form-control" formControlName="ot_amount" id="ot_amount" type="number" placeholder="1000"/>
+                  </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                  <label for="night_pph_amount">Payment per hour at night</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">&#165;</div>
+                    </div>
+                    <input class="form-control" formControlName="night_pph_amount" id="night_pph_amount" type="number" placeholder="800"/>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="night_ot_amount">Overtime payment per hour at night</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">&#165;</div>
+                    </div>
+                    <input class="form-control" formControlName="night_ot_amount" id="night_ot_amount" type="number" placeholder="1000"/>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-1" [disabled]="_jobService.jobForm.invalid">{{ _jobService.jobForm.controls['id'].value ? "Update Job" : "Add Job" }}</button>
+    </form>
+  </div>
+</ng-template>

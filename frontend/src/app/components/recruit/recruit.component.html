@@ -1,0 +1,120 @@
+<app-nav-header></app-nav-header>
+
+<div id="wrapper">
+  <app-nav-sidebar></app-nav-sidebar>
+  <div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Recruits</li>
+      </ol>
+      <div class="row">
+        <div class="col-12 mb-1">
+          <button type="button" class="btn btn-primary" (click)="createRecruitModal(template)">Add Recruit</button>
+        </div>
+      </div>
+      <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="showAlert">
+        <strong>Success!</strong> {{ messageAlert }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Job</th>
+              <th>Condition</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let recruit of recruits">
+                <td>{{ recruit.employee.first_name + ' ' + recruit.employee.last_name }}</td>
+                <td>{{ recruit.job.name }}</td>
+                <td><abbr title="Joined at {{ recruit.joined_at }}">{{ recruit.condition | titlecase }}</abbr></td>
+                <td>
+                  <button class="btn btn-primary btn-circle btn-sm" (click)="editRecruitModal(template, recruit)" title="Edit"><i class="far fa-edit"></i></button> | 
+                  <a class="btn btn-info btn-circle btn-sm" [routerLink]="['/recruits/work-logs/', recruit.id]" title="Work Log"><i class="fas fa-pencil-alt"></i></a> | 
+                  <a class="btn btn-info btn-circle btn-sm" [routerLink]="['/recruits/payments/', recruit.id]" title="Payment Calculation"><i class="far fa-money-bill-alt"></i></a> | 
+                  <button class="btn btn-danger btn-circle btn-sm" onclick="alert('I am under construction')" title="Delete"><i class="far fa-trash-alt"></i></button>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> <!-- /.container-fluid -->
+  </div> <!-- /.content-wrapper -->
+
+  <app-nav-footer></app-nav-footer>
+</div> <!-- /#wrapper -->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ _recruitService.recruitForm.controls['id'].value ? "Edit Recruit" : "New Recruit" }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <form [formGroup]="_recruitService.recruitForm" class="form" (submit)="onSubmit()">
+        <input type="hidden" formControlName="id">
+        <div class="row">
+          <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <label for="employee_id">Employee</label>
+                <ng-select
+                [items]="_recruitService.employees"
+                bindLabel="name"
+                bindValue="id"
+                placeholder="Select employee"
+                clearAllText="Clear"
+                [virtualScroll]="true"
+                [compareWith]="compareSelectValues"
+                formControlName="employee_id"
+                [loading]="a"
+               >
+              </ng-select>
+            </div>
+            <div class="form-group">
+                <label for="job_id">Job</label>
+                <ng-select
+                [items]="_recruitService.jobs"
+                bindLabel="name"
+                bindValue="id"
+                placeholder="Select company"
+                clearAllText="Clear"
+                [virtualScroll]="true"
+                [compareWith]="compareSelectValues"
+                formControlName="job_id"
+                loadingText="looo"
+               >
+              </ng-select>
+            </div>
+            <div class="form-group">
+                <label for="joined_at">Joining Date</label>
+                <input
+                class="form-control"
+                #dp="bsDatepicker"
+                bsDatepicker
+                formControlName="joined_at"
+                placeholder="YYYY-MM-DD"
+                [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }">
+            </div>
+            <div class="form-group">
+                <label for="condition">Condition</label>
+                <select class="form-control" formControlName="condition">
+                  <option value="working">Working</option>
+                  <option value="retired">Retired</option>
+                  <option value="holiday">Vacation</option>
+                </select>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="_recruitService.recruitForm.invalid">{{ _recruitService.recruitForm.controls['id'].value ? "Update Recruit" : "Add Recruit" }}</button>
+      </form>
+    </div>
+</ng-template>

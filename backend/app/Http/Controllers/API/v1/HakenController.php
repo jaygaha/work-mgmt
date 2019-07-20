@@ -82,4 +82,15 @@ class HakenController extends BaseController
     {
         //
     }
+
+    /**
+     * Get the resource in dropdown select.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getHakensForDropdown()
+    {
+        $hakens = Haken::all()->pluck('name', 'id');
+        return $this->sendResponse($hakens, 'Hakens retrieved successfully.');
+    }
 }

@@ -43,7 +43,6 @@ export class HakenService {
         this.hakenForm.controls[name].patchValue(haken[name]);
       }
     });
-    // this.hakenForm.setValue(haken);
   }
 
   //GET Haken

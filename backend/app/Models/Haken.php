@@ -12,4 +12,12 @@ class Haken extends Model
         'address',
         'contact_number'
     ];
+
+    /**
+     * The jobs that belong to the hakens.
+     */
+    public function jobs()
+    {
+        return $this->belongsToMany(Job::class, 'haken_job');
+    }
 }

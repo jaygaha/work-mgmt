@@ -1,0 +1,82 @@
+<app-nav-header></app-nav-header>
+
+<div id="wrapper">
+  <app-nav-sidebar></app-nav-sidebar>
+  <div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Employees</li>
+      </ol>
+      <div class="row">
+        <div class="col-12 mb-1">
+          <button type="button" class="btn btn-primary" (click)="createEmployeeModal(template)">Add Employee</button>
+        </div>
+      </div>
+      <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="showAlert">
+        <strong>Success!</strong> {{ messageAlert }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Gender</th>
+              <th>Telephone</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let employee of employees">
+                <td>{{ employee.first_name + " " + employee.last_name }}</td>
+                <td>{{ employee.gender | titlecase }}</td>
+                <td>{{ employee.contact_number }}</td>
+                <td><button class="btn btn-info btn-circle btn-sm" (click)="editEmployeeModal(template, employee)"><i class="far fa-edit"></i></button> | 
+                  <button class="btn btn-danger btn-circle btn-sm" onclick="alert('I am under construction')"><i class="far fa-trash-alt"></i></button></td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> <!-- /.container-fluid -->
+  </div> <!-- /.content-wrapper -->
+  <app-nav-footer></app-nav-footer>
+</div> <!-- /#wrapper -->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ _employeeService.employeeForm.controls['id'].value ? "Edit Employee" : "New Employee" }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="_employeeService.employeeForm" class="form" (submit)="onSubmit()">
+      <input type="hidden" formControlName="id">
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input class="form-control" formControlName="first_name" id="first_name" />
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input class="form-control" formControlName="last_name" id="last_name" />
+      </div>
+      <div class="form-group">
+        <label for="contact_number">Contact No.</label>
+        <input class="form-control" formControlName="contact_number" id="contact_number" />
+      </div>
+      <div class="form-group">
+        <label for="contact_number">Gender</label>
+        <select formControlName="gender" class="form-control" [compareWith]="compare">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="_employeeService.employeeForm.invalid">{{ _employeeService.employeeForm.controls['id'].value ? "Update Employee" : "Add Employee" }}</button>
+    </form>
+  </div>
+</ng-template>

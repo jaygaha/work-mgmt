@@ -1,0 +1,107 @@
+<app-nav-header></app-nav-header>
+
+<div id="wrapper">
+  <app-nav-sidebar></app-nav-sidebar>
+  <div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/recruits']">Recruits</a>
+          </li>
+        <li class="breadcrumb-item active">Payments</li>
+      </ol>
+      <div class="row">
+        <div class="col-12">
+          <h5 *ngIf="recruit">
+              {{ recruit.employee.first_name }} {{ recruit.employee.last_name }}
+              <small class="text-muted">{{ recruit.job.name }}</small><br />
+              <small class="text-muted">Company: {{ recruit.job.company.name }}</small>&nbsp;
+              <small class="text-muted">Haken: {{ recruit.job.hakens[0].name }}</small>
+          </h5>
+        </div>
+        <hr />
+        <div class="col-sm-12 col-md-8 md-5">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group">
+                <label for="exampleFormControlFile1">Payment date</label>
+                <select id="payment_date" class="form-control" (change)="onChange($event.target.value)">
+                  <option value="">Select option</option>
+                  <option *ngFor="let dt of payments.dropdown;">
+                    {{ dt.year + "/" + dt.month + '/1' | date:'MMMM, y' }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Date:
+                <span class="badge badge-primary badge-pill">{{ payments.date | date:'MMMM, y' }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Working Days:
+                <span class="badge badge-primary badge-pill">{{ payments.working_days }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Basic Hours:
+                <span class="badge badge-primary badge-pill">{{ payments.basic_hours }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Overtime Hours:
+                <span class="badge badge-primary badge-pill">{{ payments.ot_hours }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Per Hour Payment:
+                <span class="badge badge-primary badge-pill" *ngIf="recruit">{{ recruit.job.pph_amount | currency:'JPY' }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Overtime Per Hour Payment:
+                <span class="badge badge-primary badge-pill" *ngIf="recruit">{{ recruit.job.ot_amount | currency:'JPY' }}</span>
+              </li>
+
+              <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                Basic Hours(Night):
+                <span class="badge badge-primary badge-pill">0</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Overtime Hours(Night):
+                <span class="badge badge-primary badge-pill">0</span>
+              </li> -->
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Basic Payment:
+                <span class="badge badge-primary badge-pill">{{ payments.basic_payment | currency:'JPY' }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Overtime Payment:
+                <span class="badge badge-primary badge-pill">{{ payments.ot_payment | currency:'JPY' }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Total Payment:
+                <span class="badge badge-primary badge-pill">{{ payments.total_payment | currency:'JPY' }}</span>
+              </li>
+            </ul>
+            <div class="card-body">
+              <!-- 
+                TODO  
+                If payment status is required then we have to implement below form
+              -->
+              <!-- <form [formGroup]="_paymentService.paymentForm" class="form" (submit)="onSubmit()">
+                <input type="hidden" formControlName="id">
+                <input type="hidden" formControlName="recruit_id">
+                <a href="#" class="btn btn-primary card-link" *ngIf="payments && payments.working_days > 0" (click)="toggleToPaid()">Payment Pending</a>
+              </form>
+              <a href="#" class="btn btn-success card-link disabled" aria-disabled="true" *ngIf="payments && payments.working_days > 0 && payments.status=='Paid'">Salary Paid</a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div> <!-- /.container-fluid -->
+  </div> <!-- /.content-wrapper -->
+  
+  <app-nav-footer></app-nav-footer>
+</div> <!-- /#wrapper -->

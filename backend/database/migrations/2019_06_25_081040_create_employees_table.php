@@ -19,8 +19,9 @@ class CreateEmployeesTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('contact_number');
+            $table->string('address')->nullable();
             $table->set('gender', ['male', 'female'])->default('male');
-            $table->string('position');
+            $table->string('position')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
 

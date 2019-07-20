@@ -22,8 +22,6 @@ export class HakenComponent implements OnInit {
     this._hakenService.getHakens()
       .subscribe(
       hakens => { 
-        hakens['data'].map(item => item.$key = '1');
-        //let array = hakens.pipe(map{item=>item.$key = item.id};);
         let data = hakens['data']; 
         this.hakens = data;
       },

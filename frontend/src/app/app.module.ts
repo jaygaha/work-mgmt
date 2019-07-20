@@ -2,6 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +23,12 @@ import { NavSidebarComponent } from './components/nav-sidebar/nav-sidebar.compon
 import { NavFooterComponent } from './components/nav-footer/nav-footer.component';
 import { HakenComponent } from './components/haken/haken.component';
 import { HakenService } from './services/haken.service';
-import { ModalModule } from 'ngx-bootstrap/modal';
+import { CompanyComponent } from './components/company/company.component';
+import { JobComponent } from './components/job/job.component';
+import { EmployeeComponent } from './components/employee/employee.component';
+import { RecruitComponent } from './components/recruit/recruit.component';
+import { WorklogComponent } from './components/worklog/worklog.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +40,13 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     NavHeaderComponent,
     NavSidebarComponent,
     NavFooterComponent,
-    HakenComponent
+    HakenComponent,
+    CompanyComponent,
+    JobComponent,
+    EmployeeComponent,
+    RecruitComponent,
+    WorklogComponent,
+    PaymentComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +54,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    ModalModule.forRoot()
+    BrowserAnimationsModule,
+    ModalModule.forRoot(),
+    NgSelectModule,
+    BsDatepickerModule.forRoot(),
+    TimepickerModule.forRoot()
   ],
   providers: [
     AuthService, 

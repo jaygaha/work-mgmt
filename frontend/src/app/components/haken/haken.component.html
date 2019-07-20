@@ -38,7 +38,8 @@
                   <td>{{ haken.name }}</td>
                   <td>{{ haken.address }}</td>
                   <td>{{ haken.contact_number }}</td>
-                  <td><button class="btn btn-info" (click)="editHakenModal(template, haken)">Edit</button> | <button class="btn btn-danger" onclick="alert('I am under construction')">DELETE</button></td>
+                  <td><button class="btn btn-info btn-circle btn-sm" (click)="editHakenModal(template, haken)"><i class="far fa-edit"></i></button> | 
+                    <button class="btn btn-danger btn-circle btn-sm" onclick="alert('I am under construction')"><i class="far fa-trash-alt"></i></button></td>
                 </tr>
               </tbody>
             </table>
