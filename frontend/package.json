@@ -21,7 +21,7 @@
     "@angular/router": "~8.0.1",
     "@ng-select/ng-select": "^2.20.3",
     "bootstrap": "^4.3.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "ng-bootstrap": "^1.6.3",
     "ngx-bootstrap": "^5.0.0",
     "popper": "^1.0.1",
